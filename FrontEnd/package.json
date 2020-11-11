@@ -1,34 +1,29 @@
 {
-  "name": "SMM-C",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "front-end",
+  "version": "0.0.0",
   "scripts": {
-    "backend:dev": "nodemon BackEnd/index.js",
     "ng": "ng",
-    "frontend:dev": "cd FrontEnd && ng serve ",
-    "build": "cd frontend && ng build"
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "private": true,
   "dependencies": {
     "@angular/animations": "~10.1.0",
+    "@angular/cdk": "^10.2.7",
     "@angular/common": "~10.1.0",
     "@angular/compiler": "~10.1.0",
     "@angular/core": "~10.1.0",
     "@angular/forms": "~10.1.0",
+    "@angular/material": "^10.2.7",
     "@angular/platform-browser": "~10.1.0",
     "@angular/platform-browser-dynamic": "~10.1.0",
     "@angular/router": "~10.1.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
-    "zone.js": "~0.10.2",
-    "express": "^4.17.1",
-    "mongoose": "^5.10.13",
-    "nodemon": "^2.0.6",
-    "router": "^1.3.5",
-    "socket.io": "^3.0.1"
+    "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1001.0",
