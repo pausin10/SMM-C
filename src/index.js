@@ -5,7 +5,7 @@ const path = require('path');
 const passport = require('passport');
 const morgan = require('morgan');
 
-require ('./passport/local-auth');
+//require ('./passport/local-auth');
 
 const app = express();
 
