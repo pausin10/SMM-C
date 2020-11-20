@@ -26,6 +26,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('', require('./routes/routes'));
+app.use('', require('./routes/login'));
 
 app.listen(app.get('port'), () => {
     console.log(`Server on ${app.get('port')}`);
