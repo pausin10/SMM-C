@@ -8,6 +8,7 @@ const morgan = require('morgan');
 //require ('./passport/local-auth');
 
 const app = express();
+require('./database');
 
 app.set('port', process.env.PORT || 3000);
 
@@ -25,8 +26,9 @@ app.use(express.urlencoded({extended: false}));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('', require('./routes/routes'));
 app.use('', require('./routes/login'));
+app.use('', require('./routes/routes'));
+
 
 app.listen(app.get('port'), () => {
     console.log(`Server on ${app.get('port')}`);

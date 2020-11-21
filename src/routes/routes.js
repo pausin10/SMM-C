@@ -1,9 +1,8 @@
 const express = require('express');
-const passport = require('passport');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.redirect('/signin');
+router.get('/home', (req,res) =>{
+    res.render('partials/home');
 });
 
 router.get('/*', (req,res) => {
