@@ -46,4 +46,4 @@ passport.use('local-signin', new LocalStrategy({
     }
 
     done(null, search);
-}))
+}));
