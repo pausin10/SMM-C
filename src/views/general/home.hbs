@@ -1,0 +1,17 @@
+<div>
+    <div>
+        Username: {{user}}
+    </div>
+    <br><br><br>
+    <div id="container">
+        <div id="window">
+            <div id="output"></div>
+            <div id="input"></div>
+        </div>
+        <input type="hidden" id="username" value={{user}}>
+        <input type="text" id="message" placeholder="PostIt">
+        <button id="send">Send</button>
+    </div>
+</div>
+<script src="/socket.io/socket.io.js" charset="utf-8"></script>
+<script src="postit.js"></script>
