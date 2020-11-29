@@ -8,11 +8,16 @@ const morgan = require('morgan');
 const flash = require('connect-flash');
 const cors = require('cors');
 const SocketIO = require('socket.io');
-const postit = require('./models/modelPostit.js')
+const ss = require('socket.io-stream');
+const fs = require('fs');
+const rtsp = require('rtsp-ffmpeg');
+const postit = require('./models/postit.js');
+const User = require('./models/user');
+const Rooms = require('./models/room');
 
 const app = express();
 require('./database');
-require ('./passport/local-auth');
+require('./passport/local-auth');
 
 app.set('port', process.env.PORT || 3000);
 
@@ -28,18 +33,19 @@ app.set('view engine', '.hbs');
 
 app.use(morgan('dev'));
 app.use(cors());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'sockets')));
 app.use(session({
     secret: 'key',
-    resave: true,
-    saveUninitialized: true
+    resave: false,
+    saveUninitialized: true,
+    cokkie: { secure: true }
 }));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use((req,res,next) =>{
+app.use((req, res, next) => {
     app.locals.success = req.flash('success');
     app.locals.error = req.flash('error');
     next();
@@ -54,28 +60,36 @@ const server = app.listen(app.get('port'), () => {
 
 const io = SocketIO(server);
 
-io.on('connection', (socket) =>{
+io.on('connection', async (socket) => {
     console.log('Connected', socket.id);
-    socket.on('postit:message', (data) =>{
-        io.sockets.emit('postit:message',data);
-        addPostit(data);
-    });
+    socket.on('joinRoom', (socketRoom) => {
+        socket.join(socketRoom);
+        io.sockets.in(socketRoom).emit('room:message', 'what is going on, party people?');
+        io.sockets.in(socketRoom).emit() 
+
+        socket.on('postit:message', (data) => {
+            io.sockets.in(socketRoom).emit('postit:message', data);
+            addPostit(data);
+        });
+    })
 });
+
+
 
 io.on('error', () => {
     console.log('Error');
 });
 
-async function addPostit(data){
+async function addPostit(data) {
     const newPostit = new postit({
         user: data.username,
         description: data.message
     });
-    await newPostit.save((err) =>{
-        if(err){
-            console.log('Error al guardar el postit en la BD. '+err);
+    await newPostit.save((err) => {
+        if (err) {
+            console.log('Error al guardar el postit en la BD. ' + err);
             req.flash('error', 'Error al guardar');
-        }else{
+        } else {
             console.log('Exito al guardar el postit en la BD');
         }
     });
