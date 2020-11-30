@@ -1,8 +1,16 @@
-<div class="card" style="width: 18rem;">
-    <form action="/signin" method="POST">
-    Email<input type="text" name="email">
-    Password<input type="text" name="password">
-    <button type="submit" class="btn btn-outline-dark">SignIn</button>
-    <a href="/signup" class="btn btn-primary btn-sm">SignUp</a>
-</form>
+<div class="card text-center" align="center">
+    <div class="card-header">
+        <img class="logo" src="img/logo.png" width="80" height="80">
+        <h1>Please Sign In</h1>
+    </div>
+    <div class="card-body">
+        <form class="form-signin" action="/signin" method="POST">
+            <p>Email:<input type="text" name="email"></p>
+            <p>Password:<input type="text" name="password"></p>
+            <button type="submit" class="btn btn-outline-primary">SignIn</button>
+            <a href="/signup" class="btn btn-outline-primary">SignUp</a>
+    </div>
+    <div class="card-footer text-muted">
+        © 2020
+    </div>
 </div>
