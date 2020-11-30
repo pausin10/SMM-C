@@ -1,7 +1,16 @@
-<div>
-    <form action="/signup" method="POST">
-        Email/User<input type="text" name="email">
-        Password<input type="text" name="password">
-        <button type="submit">SignUp</button>
-    </form>
+<div class="card text-center" align="center">
+    <div class="card-header">
+        <img class="logo" src="img/logo.png" width="80" height="80">
+        <h1>Please Sign Up</h1>
+    </div>
+    <div class="card-body">
+        <form action="/signup" method="POST">
+            <p>Email/User:<input type="text" name="email"></p>
+            <p>Password:<input type="text" name="password"></p>
+            <button type="submit" class="btn btn-outline-primary">SignUp</button>
+        </form>
+    </div>
+    <div class="card-footer text-muted">
+        © 2020
+    </div>
 </div>
