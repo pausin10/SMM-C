@@ -1,7 +1,18 @@
 <div>
     <div>
-        <form action="/addRoom" method="POST">
-            Nombre de la sala: <input type="text" name="nombreSala">
+        <form class="form-check" action="/addRoom" method="POST">
+            Nombre de la sala: <input type="text" name="nombreSala" required><br>
+            <input class="form-check-input" type="radio" name="typeRoom" value="public" checked>
+            <label class="form-check-label" for="typeRoom">
+                Public
+            </label><br>
+            <input class="form-check-input" type="radio" name="typeRoom" value="private">
+            <label class="form-check-label" for="typeRoom">
+                Private
+            </label>
+            <br>
+            Contraseña: <input type="text" name="password"><br>
+            <input type="hidden" name="createdBy" value="{{myUser}}">
             <button type="submit">Crear</button>
         </form>
     </div>
