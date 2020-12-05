@@ -1,33 +1,49 @@
 const room = require('../models/room');
 const postit = require('../models/postit');
+const fs = require('fs');
 
 module.exports = (io) => {
     io.on('connection', (socket) => {
         console.log('Connected', socket.id);
-        socket.on('joinRoom:private', async (socketInfo, socketRoom) => {
+
+        socket.on('joinRoom:private', async (socketInfo) => {
             if (await checkRoom(socketInfo)) {
-                socket.join(socketRoom);
-                io.sockets.in(socketRoom).emit('room:message', 'Private Room ' + socketInfo[1]);
+                socket.join(socketInfo[1]);
+                io.sockets.in(socketInfo[1]).emit('room:message', 'Private Room ' + socketInfo[1]);
                 socket.on('postit:message', (data) => {
-                    io.sockets.in(socketRoom).emit('postit:message', data);
+                    io.sockets.to(socketInfo[1]).emit('postit:message', data);
                     addPostit(data);
+                })
+                socket.on('video:play', () => {
+                    io.to(socketInfo[1]).emit('video:playAll');
+                })
+                socket.on('video:pause', () => {
+                    io.to(socketInfo[1]).emit('video:pauseAll');
+                })
+                socket.on('socketRoom:unsubscribe', () => {
+                    console.log(socket.adapter.rooms);
+                    socket.leave(socketInfo[1]);
                 })
             }
         })
+
         socket.on('joinRoom:public', (socketRoom) => {
             socket.join(socketRoom[1]);
-            io.to(socketRoom[1]).emit('room:message', 'Public Room '+ socketRoom[1]);
+            io.to(socketRoom[1]).emit('room:message', 'Public Room ' + socketRoom[1]);
             socket.on('postit:message', (data) => {
                 io.to(socketRoom[1]).emit('postit:message', data);
                 addPostit(data);
             });
-
-        })
-        socket.on('socketRoom:unsubscribe', (socketRoom) => {
-            socket.leave(socketRoom);
-            
-        })
-
+            socket.on('video:play', () => {
+                io.to(socketRoom[1]).emit('video:playAll', socketRoom[1]);
+            })
+            socket.on('video:pause', () => {
+                io.to(socketRoom[1]).emit('video:pauseAll', socketRoom[1]);
+            })
+            socket.on('socketRoom:unsubscribe', () => {          
+                socket.leave(socketRoom[1]);
+            })
+        });
     });
 
 
@@ -39,7 +55,9 @@ module.exports = (io) => {
     async function addPostit(data) {
         const newPostit = new postit({
             user: data.username,
-            description: data.message
+            text: data.message,
+            nameVideo: data.nameVideo,
+            currentTime: data.currentTime
         });
         await newPostit.save((err) => {
             if (err) {

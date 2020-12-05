@@ -42,7 +42,7 @@ router.post('/addRoom', isAuthenticated, async (req, res) => {
             req.flash('error', 'Error al crear una sala');
             res.redirect('/addRoom');
         } else {
-            console.log('Sala ' + req.body.nombreSala + ' creada por ' + req.bodycreatedBy + ' guardada con exito ');
+            console.log('Sala ' + req.body.nombreSala + ' creada por ' + req.body.createdBy + ' guardada con exito ');
             res.redirect('/home');
         }
     })
