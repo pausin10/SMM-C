@@ -27,13 +27,19 @@ Salas Disponibles:<br>
             {{/ifEqu}}
             <input type="hidden" id="typeRoom" value="{{type}}">
             <a class="btn btn-outline-dark btn-sm" id="{{_id}},{{name}},{{type}}">Join</a>
-            <a class="btn btn-outline-dark btn-sm" id="leaveRoom">Leave</a>
+            <a class="btn btn-outline-dark btn-sm" id="leaveRoom" href="/home">Leave</a>
             <a class="btn btn-outline-dark btn-sm" href="/addRoom/delete/{{_id}}">Delete</a>
         </div>
     </div>
 </div>
 {{/each}}
 
+<div id="videoHTML">
+    <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"
+        width="640" height="360"></video>
+    <button class="btn btn-outline-dark btn-sm" id="playVideo">Play</button>
+    <button class="btn btn-outline-dark btn-sm" id="pauseVideo">Pause</button>
+</div>
 
 <script src="/socket.io/socket.io.js" charset="utf-8"></script>
 <script src="socketFE.js"></script>

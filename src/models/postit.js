@@ -3,7 +3,9 @@ const { Schema } = mongoose;
 
 const postItSchema = new Schema({
     user: { type: String },
-    description: { type: String },
+    text: { type: String },
+    nameVideo: { type: String },
+    currentTime: { type: String },
     date: { type: Date, default: Date.now }
 });
 

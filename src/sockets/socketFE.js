@@ -1,9 +1,13 @@
 const socket = io();
 
-let message = document.getElementById('message');
-let username = document.getElementById('username');
 let btnSend = document.getElementById('sendPostit');
 let btnLeave = document.getElementById('leaveRoom');
+let btnPlay = document.getElementById('playVideo');
+let btnPause = document.getElementById('pauseVideo');
+let media = document.querySelector('video');
+
+let message = document.getElementById('message');
+let username = document.getElementById('username');
 let output = document.getElementById('output');
 let idRoom = document.getElementById('idRoom');
 let password = document.getElementById('password');
@@ -12,9 +16,11 @@ let typeRoom = document.getElementById('typeRoom');
 
 document.querySelector("body").addEventListener('click', (data) => {
     const dataInput = data.target.closest('a');
+
     if (dataInput !== null) {
         const sendDataInput = { ...dataInput.id.split(',') };
         if (dataInput.id == 'leaveRoom') {
+            console.log('Leave Room')
             socket.emit('socketRoom:unsubscribe');
         }
         if (password.value) {
@@ -27,16 +33,33 @@ document.querySelector("body").addEventListener('click', (data) => {
             socket.emit('joinRoom:public', sendDataInput);
             document.getElementById('password').value = '';
         }
+        
+
     }
 });
-
 
 btnSend.addEventListener('click', () => {
     socket.emit('postit:message', {
         message: message.value,
-        username: username.value
+        username: username.value,
+        nameVideo: media.currentSrc,
+        currentTime: media.currentTime
     });
+    document.getElementById('message').value = '';
 });
+btnPlay.addEventListener('click', () => {
+    socket.emit('video:play');
+});
+btnPause.addEventListener('click', () => {
+    socket.emit('video:pause');
+});
+
+socket.on('video:playAll', () => {
+    media.play();
+})
+socket.on('video:pauseAll', () => {
+    media.pause();
+})
 
 socket.on('postit:message', (data) => {
     output.innerHTML += `<p>
