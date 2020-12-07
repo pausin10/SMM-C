@@ -5,33 +5,35 @@
             <div id="output"></div>
             <div id="input"></div>
         </div>
-        <input type="hidden" id="username" value={{myUser.user}}>
+        <input type="hidden" id="username" value={{myUser}}>
         <input type="text" id="message" placeholder="PostIt">
-        <button id="send">Send</button>
+        <button class="btn btn-outline-dark btn-sm" id="sendPostit">Send</button>
 
     </div>
 </div>
 
-Salas <br>
+Salas Disponibles:<br>
 {{#each rooms}}
 <div class=" card-deck" style="width: 20rem;">
     <div class="card">
         <div class="card text-center">
             <ul class="list-group list-group-flush">
-                <p class="card-text">{{name}}</p>
+                <p class="card-text">
+                <div>{{name}}</div>
+                </p>
             </ul>
-            <a class="btn btn-outline-dark btn-sm" id="{{_id}}">Join</a>
+            {{#ifEqu 'private' type}}
+            <input type="password" placeholder="Password" id="password">
+            {{/ifEqu}}
+            <input type="hidden" id="typeRoom" value="{{type}}">
+            <a class="btn btn-outline-dark btn-sm" id="{{_id}},{{name}},{{type}}">Join</a>
+            <a class="btn btn-outline-dark btn-sm" id="leaveRoom">Leave</a>
+            <a class="btn btn-outline-dark btn-sm" href="/addRoom/delete/{{_id}}">Delete</a>
         </div>
     </div>
 </div>
 {{/each}}
 
-<a class="btn btn-outline-dark btn-sm" href="/postit">PostIt</a>
-
-
-<img id="videoPlayer"></img>
-
-
 
 <script src="/socket.io/socket.io.js" charset="utf-8"></script>
-<script src="Socket.js"></script>
+<script src="socketFE.js"></script>
