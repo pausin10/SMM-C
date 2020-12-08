@@ -40,6 +40,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'sockets')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: 'key',
     resave: false,
