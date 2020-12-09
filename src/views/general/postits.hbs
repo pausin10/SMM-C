@@ -1,17 +1,28 @@
-{{#each myPostits}}
-<div class=" card-deck" style="width: 20rem;">
-    <div class="card">
-        <div class="card text-center">
-            <ul class="list-group list-group-flush">
-                <p class="card-text">{{text}}</p>
-                <p class="card-text">{{nameVideo}}</p>
-                <p class="card-text">{{currentTime}}</p>
-                <div class="card-footer">
-                    <p><small class="text-muted">{{date}}</small></p>
+<div class="container-fluid" style="padding-left: 0px;padding-right: 0px;">
+    <div class="row">
+        {{#each myPostits}}
+        <div class="col-3">
+            <div class=" card-deck" style="width: 20rem;">
+                <div class="card text-center">
+                    <h5 class="card-title">{{text}}</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">{{nameVideo}}</li>
+                        <li class="list-group-item">{{currentTime}} s</li>
+                        <div class="card-footer">
+                            <p><small class="text-muted">{{date}}</small></p>
+                        </div>
+                    </ul>
+                    <div class="row">
+                        <div class="col-6">
+                            <a class="btn btn-outline-dark col-12 btn-sm" href="/postit/delete/{{_id}}">Borrar</a>
+                        </div>
+                        <div class="col-6">
+                            <a class="btn btn-sm border-dark col-12 bg-info" href="/postit/deleteAll">Borrar Todos</a>
+                        </div>
+                    </div>
                 </div>
-            </ul>
-            <a href="/postit/delete/{{_id}}" class="btn btn-outline-dark btn-sm">Borrar</a>
+            </div>
         </div>
+        {{/each}}
     </div>
 </div>
-{{/each}}
