@@ -1,45 +1,73 @@
-<div>
-    <br><br><br>
-    <div id="container">
-        <div id="window">
-            <div id="output"></div>
-            <div id="input"></div>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+    integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+<div class="container-fluid bg-light" style="padding-left: 0px;padding-right: 0px;">
+    <div class="row">
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="card border-dark overflow-auto" style="height: 580px;">
+            <div class="card-header text-center bg-light border-dark">Rooms</div>
+            <br>
+            <div class="col-1">
+                {{#each rooms}}
+                <div class="card-deck border-dark" style="width: 8rem;">
+                    <div class="card text-center border-dark">
+                        <ul class="list-group list-group-flush">
+                            <p class="card-text bg-light">{{name}}</p>
+                        </ul>
+                        {{#ifEqu 'private' type}}
+                        <input type="password" placeholder="Password" id="password">
+                        {{/ifEqu}}
+                        <input type="hidden" id="typeRoom" value="{{type}}">
+                        <a class="btn btn-sm border-dark bg-success" id="{{_id}},{{name}},{{type}}">Join</a>
+                        <a class="btn btn-sm border-dark bg-warning" id="leaveRoom" href="/home">Leave</a>
+                        <a class="btn btn-sm border-dark bg-danger" href="/addRoom/delete/{{_id}}">Delete</a>
+                    </div>
+                </div>
+                <br>
+                {{/each}}
+            </div>
         </div>
-        <input type="hidden" id="username" value={{myUser}}>
-        <input type="text" id="message" placeholder="PostIt">
-        <button class="btn btn-outline-dark btn-sm" id="sendPostit">Send</button>
+        <div class="col-7" style="padding-left: 0px;padding-right: 0px;">
+            <div style="margin-top: 0px;" id="videoHTML">
+                <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                    id="videoPlayer" type="video/mp4" width="810" height="452"></video>
+            </div>
+            <div class="card border-dark" style="width: 808px;">
+                <div class="row">
+                    <div class="col-6" style="padding-right: 0px;padding-left: 20px;">
+                        <a class="fas fa-play" id="playVideo"></a>
+                        <a class="fas fa-pause" id="pauseVideo"></a>
+                        <a id="nombreSala"></a>
+                    </div>
+                    <div class="col-6 text-right" style="padding-right: 20px;">
+                        <a id="nombreArchivo"></a>
+                        <a class="fas fa-folder" id="selectVideo"></a>
+                        <a class="fas fa-check" id="sendPostit"></a>
+                        <input type="file" id="fileupload" hidden></input>
+                    </div>
+                </div>
+            </div>
+            <div style="padding-right: 0px;padding-left: 1px;">
+                <textarea style="height: 95px;width:808px;" id="message" placeholder="PostIt"></textarea>
+            </div>
+        </div>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="col-3 text-left" style="padding-left: 0px;padding-right: 0px;">
+            <div class="card border-dark mb-3 overflow-auto bg-warning" style="height: 580px;width: 345px;">
+                <div class="card-header text-center bg-warning border-dark ">Post-It</div><br>
+                <div style="width: 300px;">
+                    <input type="hidden" id="username" value={{myUser}}>
+                    <div id="window">
+                        <ul class="list-group list-group-flush">
+                            <div class="card-text" style="margin-left: 2px;" id="output"></div><br>
+                        </ul>
+                        <div id="input"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>
-
-Salas Disponibles:<br>
-{{#each rooms}}
-<div class=" card-deck" style="width: 20rem;">
-    <div class="card">
-        <div class="card text-center">
-            <ul class="list-group list-group-flush">
-                <p class="card-text">
-                <div>{{name}}</div>
-                </p>
-            </ul>
-            {{#ifEqu 'private' type}}
-            <input type="password" placeholder="Password" id="password">
-            {{/ifEqu}}
-            <input type="hidden" id="typeRoom" value="{{type}}">
-            <a class="btn btn-outline-dark btn-sm" id="{{_id}},{{name}},{{type}}">Join</a>
-            <a class="btn btn-outline-dark btn-sm" id="leaveRoom" href="/home">Leave</a>
-            <a class="btn btn-outline-dark btn-sm" href="/addRoom/delete/{{_id}}">Delete</a>
-        </div>
-    </div>
-</div>
-{{/each}}
-
-<div id="videoHTML">
-    <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"
-        width="640" height="360"></video>
-    <button class="btn btn-outline-dark btn-sm" id="playVideo">Play</button>
-    <button class="btn btn-outline-dark btn-sm" id="pauseVideo">Pause</button>
-</div>
-
 <script src="/socket.io/socket.io.js" charset="utf-8"></script>
 <script src="socketFE.js"></script>

@@ -4,6 +4,7 @@ let btnSend = document.getElementById('sendPostit');
 let btnLeave = document.getElementById('leaveRoom');
 let btnPlay = document.getElementById('playVideo');
 let btnPause = document.getElementById('pauseVideo');
+let btnSelect = document.getElementById('selectVideo');
 let media = document.querySelector('video');
 
 let message = document.getElementById('message');
@@ -33,7 +34,7 @@ document.querySelector("body").addEventListener('click', (data) => {
             socket.emit('joinRoom:public', sendDataInput);
             document.getElementById('password').value = '';
         }
-        
+
 
     }
 });
@@ -52,6 +53,16 @@ btnPlay.addEventListener('click', () => {
 });
 btnPause.addEventListener('click', () => {
     socket.emit('video:pause');
+});
+btnSelect.addEventListener('click', () => {
+    document.getElementById('fileupload').click();
+    const fileupload = document.getElementById('fileupload');
+    fileupload.addEventListener('change', (event) => {
+        const fileList = event.target.files;
+        document.getElementById('nombreArchivo').innerHTML=fileList[0].name;
+        document.getElementById('videoPlayer').src = 'video/' + fileList[0].name;
+    });
+
 });
 
 socket.on('video:playAll', () => {
