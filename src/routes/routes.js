@@ -25,6 +25,11 @@ router.get('/postit/delete/:id', isAuthenticated, async (req, res) => {
     res.redirect('/postit');
 });
 
+router.get('/postit/deleteAll', isAuthenticated, async (req, res) => {
+    await postit.deleteMany();
+    res.redirect('/postit');
+});
+
 router.get('/addRoom', isAuthenticated, async (req, res) => {
     res.render('general/addRoom', { myUser: req.user.email });
 });
