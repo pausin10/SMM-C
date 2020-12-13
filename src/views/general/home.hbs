@@ -5,7 +5,7 @@
     <div class="row">
         &nbsp;&nbsp;&nbsp;&nbsp;
         <div class="card border-dark overflow-auto" style="height: 580px;">
-            <div class="card-header text-center bg-light border-dark">Rooms</div>
+            <div class="card-header text-center bg-light border-dark" style="width: 8rem;">Rooms</div>
             <br>
             <div class="col-1">
                 {{#each rooms}}
@@ -18,7 +18,8 @@
                         <input type="password" placeholder="Password" id="password">
                         {{/ifEqu}}
                         <input type="hidden" id="typeRoom" value="{{type}}">
-                        <a class="btn btn-sm border-dark bg-success" id="{{_id}},{{name}},{{type}}">Join</a>
+                        <a class="btn btn-sm border-dark bg-success"
+                            id="{{_id}},{{name}},{{type}},{{../myUser}}">Join</a>
                         <a class="btn btn-sm border-dark bg-warning" id="leaveRoom" href="/home">Leave</a>
                         <a class="btn btn-sm border-dark bg-danger" href="/addRoom/delete/{{_id}}">Delete</a>
                     </div>
@@ -34,31 +35,39 @@
             </div>
             <div class="card border-dark" style="width: 808px;">
                 <div class="row">
-                    <div class="col-6" style="padding-right: 0px;padding-left: 20px;">
+                    <div class="col-10" style="padding-right: 0px;padding-left: 20px;">
                         <a class="fas fa-play" id="playVideo"></a>
                         <a class="fas fa-pause" id="pauseVideo"></a>
-                        <a id="nombreSala"></a>
+                            <FONT SIZE=2>
+                                <select style="margin-left:20px;max-width: 180px;" id="videoname">
+                                    {{#each myVideos}}
+                                    <option class="fa"> {{name}}</option>
+                                    {{/each}}
+                                </select>
+                            </FONT>
+                            <FONT SIZE=2><a style="margin-left:90px;" id="nombreArchivo"></a></FONT>
                     </div>
-                    <div class="col-6 text-right" style="padding-right: 20px;">
-                        <a id="nombreArchivo"></a>
-                        <a class="fas fa-folder" id="selectVideo"></a>
-                        <a class="fas fa-check" id="sendPostit"></a>
-                        <input type="file" id="fileupload" hidden></input>
-                    </div>
+                    <div class="col-1" style="margin-left:55px;" id="nombreSala"></div>
                 </div>
             </div>
-            <div style="padding-right: 0px;padding-left: 1px;">
-                <textarea style="height: 95px;width:808px;" id="message" placeholder="PostIt"></textarea>
+            <div class="row" style="padding-right: 0px;padding-left: 0x;">
+                <div class="col-11" style="padding-right: 0px;padding-left: 0x;">
+                    <textarea style="height: 95px;width:735px;" id="message" placeholder="PostIt"></textarea>
+                </div>
+                <div class="col-1">
+                    <button style="height: 48px;width:73px;border-width:1px;margin-top:0.25px;" class="fas fa-save" id="savePostit"></button>
+                    <button style="height: 47px;width:73px;border-width:1px;" class="fas fa-paper-plane " id="sendPostit"></buton>
+                </div>
             </div>
         </div>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="col-3 text-left" style="padding-left: 0px;padding-right: 0px;">
-            <div class="card border-dark mb-3 overflow-auto bg-warning" style="height: 580px;width: 345px;">
+        <div class="col-3 text-left" style="padding-left: 38px;padding-right: 0px;">
+            <div class="card border-dark overflow-auto bg-warning" style="height: 580px;width: 340px;">
                 <div class="card-header text-center bg-warning border-dark ">Post-It</div><br>
                 <div style="width: 300px;">
                     <input type="hidden" id="username" value={{myUser}}>
                     <div id="window">
                         <ul class="list-group list-group-flush">
+                            <div class="card-text" style="margin-left: 2px;" id="info"></div><br>
                             <div class="card-text" style="margin-left: 2px;" id="output"></div><br>
                         </ul>
                         <div id="input"></div>

@@ -3,12 +3,16 @@ const router = express.Router();
 const user = require('../models/user');
 const postit = require('../models/postit');
 const room = require('../models/room');
+const video = require('../models/video');
 
 router.get('/home', isAuthenticated, async (req, res) => {
     const rooms = await room.find().lean();
+    const myVideos= await video.find().lean();
     res.render('general/home', {
         myUser: req.user.email,
+        myVideos,
         rooms: { ...rooms }
+        
     });
 });
 
@@ -54,7 +58,13 @@ router.post('/addRoom', isAuthenticated, async (req, res) => {
 })
 
 router.get('/addRoom/delete/:id', isAuthenticated, async (req, res) => {
-    await room.findByIdAndDelete({ _id: req.params.id });
+
+    await room.countDocuments({ _id: req.params.id,createdBy:req.user.email},async (err,count)=>{
+        if(count==1) {
+            await room.findByIdAndDelete({ _id: req.params.id });
+        }
+        else console('Imposible eliminar, no eres el creador de la sala');
+    });
     res.redirect('/home');
 })
 
