@@ -16,7 +16,6 @@ let idRoom = document.getElementById('idRoom');
 let password = document.getElementById('password');
 let typeRoom = document.getElementById('typeRoom');
 
-
 document.querySelector("body").addEventListener('click', (data) => {
     const dataInput = data.target.closest('a');
     const dataVideo = data.target.closest('input');
@@ -31,13 +30,13 @@ document.querySelector("body").addEventListener('click', (data) => {
             console.log('Leave Room')
             socket.emit('socketRoom:unsubscribe', sendDataInput);
         }
-        if (password.value) {
-            Object.assign(sendDataInput, { 3: password.value });
+        if (sendDataInput[2]=='private'&&password.value) {
+            Object.assign(sendDataInput, { 4: password.value });
             document.getElementById('password').value = '';
             socket.emit('joinRoom:private', sendDataInput);
             return;
         }
-        if (Object.keys(sendDataInput).length >= 3) {
+        if (sendDataInput[2]=='public') {
             socket.emit('joinRoom:public', sendDataInput);
             document.getElementById('password').value = '';
         }
@@ -52,7 +51,7 @@ btnSelect.addEventListener('click', () => {
     socket.emit('video:source', text);
 });
 
-btnSave.addEventListener('click', () => {
+/*btnSave.addEventListener('click', () => {
     socket.emit('postit:save', {
         message: message.value,
         username: username.value,
@@ -60,7 +59,7 @@ btnSave.addEventListener('click', () => {
         currentTime: media.currentTime
     });
     document.getElementById('message').value = '';
-});
+});*/
 
 btnSend.addEventListener('click', () => {
     socket.emit('postit:message', {

@@ -36,6 +36,7 @@ module.exports = (io) => {
             io.to(socketRoom[1]).emit('room:message', socketRoom);
             socket.on('postit:message', (data) => {
                 io.to(socketRoom[1]).emit('postit:message', data);
+                addPostit(data);
             });
             socket.on('postit:save', (data) => {
                 addPostit(data);
@@ -59,7 +60,7 @@ module.exports = (io) => {
 
     async function checkRoom(data) {
         const roomOne = await room.findById({ _id: data[0] });
-        return (roomOne.password == data[3]) ? true : false;
+        return (roomOne.password == data[4]) ? true : false;
     }
 
     async function addPostit(data) {

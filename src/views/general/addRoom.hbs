@@ -1,19 +1,39 @@
 <div>
     <div>
         <form class="form-check" action="/addRoom" method="POST">
-            Nombre de la sala: <input type="text" name="nombreSala" required><br>
-            <input class="form-check-input" type="radio" name="typeRoom" value="public" checked>
-            <label class="form-check-label" for="typeRoom">
-                Public
-            </label><br>
-            <input class="form-check-input" type="radio" name="typeRoom" value="private">
-            <label class="form-check-label" for="typeRoom">
-                Private
-            </label>
-            <br>
-            Contraseña: <input type="text" name="password"><br>
-            <input type="hidden" name="createdBy" value="{{myUser}}">
-            <button type="submit">Crear</button>
+            <div class="col-md-3 mx-auto text-center" style="margin-top: 70px;">
+                <div class="bg-light card border-dark" style="width: 18rem;">
+                    <ul class="list-group list-group-flush">
+                        <li class="bg-light list-group-item"><br>
+                            <h5>Room name</h5>
+                            <input type="text" name="nombreSala" required autofocus><br><br>
+                        </li>
+                        <li class="bg-light list-group-item">
+                            <input class="form-check-input" type="radio" name="typeRoom" id="radioButtonPublic"
+                                onchange="mostrar(this.value);" value="public" checked>
+                            <label style="margin-right:40px;" class="form-check-label" for="typeRoom">
+                                Public
+                            </label>
+                            <input class="form-check-input" type="radio" name="typeRoom" id="radioButtonPrivate"
+                                onchange="mostrar(this.value);" value="private">
+                            <label class="form-check-label" id="privateLabel" for="typeRoom">
+                                Private
+                            </label>
+                            <br><br>
+                        </li>
+
+                        <li class="bg-light list-group-item">
+                            <h5 id="pwdPrivate">Password</h5>
+                            <input style="margin-left:18px;" id="pwdInput" type="password" name="password"><br>
+                            <input type="hidden" name="createdBy" value="{{myUser}}">
+                        </li><br>
+                        <button class="card-footer btn btn-sm border-dark col-8 bg-info" style="margin-left:50px;"
+                            type="submit">Add Room</button><br>
+                    </ul>
+                </div>
+
+            </div>
         </form>
     </div>
 </div>
+<script src="addRoom.js"></script>
