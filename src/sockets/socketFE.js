@@ -30,18 +30,16 @@ document.querySelector("body").addEventListener('click', (data) => {
             console.log('Leave Room')
             socket.emit('socketRoom:unsubscribe', sendDataInput);
         }
-        if (sendDataInput[2]=='private'&&password.value) {
+        if (sendDataInput[2] == 'private' && password.value) {
             Object.assign(sendDataInput, { 4: password.value });
             document.getElementById('password').value = '';
             socket.emit('joinRoom:private', sendDataInput);
             return;
         }
-        if (sendDataInput[2]=='public') {
+        if (sendDataInput[2] == 'public') {
             socket.emit('joinRoom:public', sendDataInput);
             document.getElementById('password').value = '';
         }
-
-
     }
 });
 
@@ -95,15 +93,15 @@ socket.on('postit:message', (data) => {
 });
 
 socket.on('room:message', (data) => {
-    info.innerHTML += data[3] + ' joined to ' + data[1]+'<br>';
+    info.innerHTML += data[3] + ' joined to ' + data[1] + '<br>';
     info.style.color = "grey";
     info.style.fontStyle = "italic";
     document.getElementById('nombreSala').innerHTML = data[1];
 });
 socket.on('user:leave', (data) => {
     console.log(data[3] + ' left ' + data[1]);
-    info.innerHTML += data[3] + ' left ' + data[1]+'<br>';
+    info.innerHTML += data[3] + ' left ' + data[1] + '<br>';
     info.style.color = "grey";
     info.style.fontStyle = "italic";
-    
+
 });

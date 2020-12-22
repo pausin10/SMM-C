@@ -12,6 +12,7 @@ module.exports = (io) => {
                 socket.join(socketInfo[1]);
                 io.sockets.in(socketInfo[1]).emit('room:message', socketInfo);
                 socket.on('postit:message', (data) => {
+                    addPostit(data);
                     io.sockets.to(socketInfo[1]).emit('postit:message', data);
                 })
                 socket.on('postit:save', (data) => {
@@ -29,14 +30,14 @@ module.exports = (io) => {
                     socket.leave(socketInfo[1]);
                 })
             }
-        })
+        });
 
         socket.on('joinRoom:public', (socketRoom) => {
             socket.join(socketRoom[1]);
             io.to(socketRoom[1]).emit('room:message', socketRoom);
             socket.on('postit:message', (data) => {
-                io.to(socketRoom[1]).emit('postit:message', data);
                 addPostit(data);
+                io.to(socketRoom[1]).emit('postit:message', data);
             });
             socket.on('postit:save', (data) => {
                 addPostit(data);

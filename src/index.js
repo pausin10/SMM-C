@@ -8,9 +8,7 @@ const morgan = require('morgan');
 const flash = require('connect-flash');
 const cors = require('cors');
 
-const ss = require('socket.io-stream');
 const fs = require('fs');
-const rtsp = require('rtsp-ffmpeg');
 const postit = require('./models/postit.js');
 const User = require('./models/user');
 const room = require('./models/room');
@@ -18,6 +16,7 @@ const room = require('./models/room');
 const app = express();
 require('./database');
 require('./passport/local-auth');
+require('dotenv').config({path: __dirname + '/config/.secrets'});
 
 app.set('port', process.env.PORT || 3000);
 
@@ -36,7 +35,7 @@ app.engine('.hbs', exphbs({
 app.set('view engine', '.hbs');
 
 app.use(morgan('dev'));
-app.use(cors());
+//app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'sockets')));
