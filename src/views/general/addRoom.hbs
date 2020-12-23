@@ -21,12 +21,20 @@
                             </label>
                             <br><br>
                         </li>
-
                         <li class="bg-light list-group-item">
                             <h5 id="pwdPrivate">Password</h5>
                             <input style="margin-left:18px;" id="pwdInput" type="password" name="password"><br>
                             <input type="hidden" name="createdBy" value="{{myUser}}">
                         </li><br>
+                        <li class="bg-light list-group-item">
+                            <h5>Users to invite</h5>
+                            <input style="margin-left:18px;" type="text" id="userMail">
+                            <input type="button" class="card-footer btn btn-sm border-dark col-8 bg-info"
+                                id="btnUserMail" value="Add User">
+                            <div id="outputMail"></div>
+                            <input type="hidden" id="sendMail" name="sendMail">
+                            <br>
+                        </li>
                         <button class="card-footer btn btn-sm border-dark col-8 bg-info" style="margin-left:50px;"
                             type="submit">Add Room</button><br>
                     </ul>
