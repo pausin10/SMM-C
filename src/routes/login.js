@@ -22,7 +22,7 @@ router.get('/signup', (req, res) => {
 });
 
 router.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/home',
+    successRedirect: '/signin',
     failureRedirect: '/signup',
     passReqToCallback: true
 }));
