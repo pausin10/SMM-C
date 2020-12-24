@@ -24,7 +24,7 @@ jspm_packages/
 # dotenv environment variables file
 .env
 .env.test
-config/.secrets
+src/config/.secrets
 
 # VisualStudioCode
 .vscode/*
