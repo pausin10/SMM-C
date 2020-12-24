@@ -1,17 +1,14 @@
-document.getElementById('pwdPrivate').style.display = 'none';
-document.getElementById('pwdInput').style.display = 'none';
+document.getElementById('listPrivate').style.display = 'none';
 
 let addUserMail = '';
 let btnUserMail = document.getElementById('btnUserMail').click();
 
-function mostrar(dato) {
-    if (dato == 'public') {
-        document.getElementById('pwdPrivate').style.display = 'none';
-        document.getElementById('pwdInput').style.display = 'none';
+function mostrar(dato){
+    if(dato=='public'){
+        document.getElementById('listPrivate').style.display = 'none'
     }
-    if (dato == 'private') {
-        document.getElementById('pwdPrivate').style.display = 'block';
-        document.getElementById('pwdInput').style.display = 'block';
+    else if(dato=='private'){
+        document.getElementById('listPrivate').style.display = 'block';
     }
 }
 

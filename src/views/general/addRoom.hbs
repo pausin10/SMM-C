@@ -6,24 +6,23 @@
                     <ul class="list-group list-group-flush">
                         <li class="bg-light list-group-item"><br>
                             <h5>Room name</h5>
-                            <input type="text" name="nombreSala" required autofocus><br><br>
+                            <input type="text" name="nombreSala" required><br><br>
                         </li>
                         <li class="bg-light list-group-item">
-                            <input class="form-check-input" type="radio" name="typeRoom" id="radioButtonPublic"
-                                onchange="mostrar(this.value);" value="public" checked>
+                            <input class="form-check-input" type="radio" name="typeRoom" onchange="mostrar(this.value);" value="public" checked>
                             <label style="margin-right:40px;" class="form-check-label" for="typeRoom">
                                 Public
                             </label>
-                            <input class="form-check-input" type="radio" name="typeRoom" id="radioButtonPrivate"
-                                onchange="mostrar(this.value);" value="private">
+                            <input class="form-check-input" type="radio" name="typeRoom" onchange="mostrar(this.value);" value="private">
                             <label class="form-check-label" id="privateLabel" for="typeRoom">
                                 Private
                             </label>
                             <br><br>
                         </li>
-                        <li class="bg-light list-group-item">
-                            <h5 id="pwdPrivate">Password</h5>
-                            <input style="margin-left:18px;" id="pwdInput" type="password" name="password"><br>
+
+                        <li class="bg-light list-group-item" id="listPrivate">
+                            <h5>Password</h5>
+                            <input style="margin-left:18px;" type="password" name="password"><br>
                             <input type="hidden" name="createdBy" value="{{myUser}}">
                         </li><br>
                         <li class="bg-light list-group-item">
