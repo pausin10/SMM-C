@@ -4,8 +4,10 @@
 <div class="container-fluid" style="padding-left: 0px;padding-right: 0px;">
     <div class="row">
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="card mx-auto border-dark overflow-auto" style="height: 580px;width :195px;background-color:ghostwhite" id="leftColumn">
-            <div class="card-header text-center border-dark" style="width: 12rem;background-color:ghostwhite;" id="title">Available Rooms</div>
+        <div class="card mx-auto border-dark overflow-auto"
+            style="height: 580px;width :195px;background-color:ghostwhite" id="leftColumn">
+            <div class="card-header text-center border-dark" style="width: 12rem;background-color:ghostwhite;"
+                id="title">Available Rooms</div>
             <br>
             <div class="col-1">
                 {{#each rooms}}
@@ -16,20 +18,20 @@
                                 <p class="card-text bg-light">{{name}}</p>
                             </ul>
                             {{#ifEqu 'private' type}}
-                            <input type="password" placeholder="Password" name ="password" id="{{../_id}}"></input>
+                            <input type="password" placeholder="Password" name="password" id="{{../_id}}"></input>
                             {{/ifEqu}}
                             <input type="hidden" id="typeRoom" value="{{type}}">
                             <a class="btn btn-sm border-dark bg-success"
                                 id="{{_id}},{{name}},{{type}},{{../myUser}},{{createdBy}}" name="joinButton">Join</a>
                             <a class="btn btn-sm border-dark bg-warning" name="leaveButton" id="leaveRoom"
                                 style="display:none;" href="/home" title="{{name}}">Leave</a>
-                                {{#ifEqu ../myUser createdBy}}
+                            {{#ifEqu ../myUser createdBy}}
                             <a class="btn btn-sm border-dark bg-danger" href="/addRoom/delete/{{../_id}}"
                                 name="deleteButton">Delete</a>
-                                {{else}}
-                                <a class="btn btn-sm border-dark bg-danger" style="pointer-events:none;" href="/addRoom/delete/{{../id}}"
-                                name="deleteButton">Delete</a>
-                                {{/ifEqu}}
+                            {{else}}
+                            <a class="btn btn-sm border-dark bg-danger" style="pointer-events:none;"
+                                href="/addRoom/delete/{{../id}}" name="deleteButton">Delete</a>
+                            {{/ifEqu}}
                         </div>
                     </div>
                 </div>
@@ -40,14 +42,17 @@
         <div class="col-7" style="display:none;padding-left: 0px;padding-right: 0px;" id="centerColumn">
             <div style="margin-top: 0px;" id="videoHTML">
                 <iframe src="https://www.youtube.com/embed/etAIpkdhU9Q?enablejsapi=1&origin=http://localhost:3000"
-                    id="videoPlayer" width="810" height="452"></iframe>
+                    id="videoPlayer" width="810" height="452" style="pointer-events:none;" allow="fullscreen"></iframe>
             </div>
             <div class="card border-dark" style="width: 808px;background-color:rgb(153, 153, 153)">
                 <div class="row">
                     <div class="col-10" style="padding-right: 0px;padding-left: 20px;">
                         <a class="fas fa-play" style="border-width:1px;" id="playVideo" title="Play"></a>
                         <a class="fas fa-pause" style="border-width:1px;" id="pauseVideo" title="Pause"></a>
-                        <input style="margin-left:50px;margin-right:10px;border-color:black;max-width: 180px;height:20px;background-color:rgb(153, 153, 153);border-width:1px;" type="text" placeholder="Video ID" id="videoID"><a class="fas fa-share-alt" style="border-width:1px;" id="shareVideo" title="Share"></a>
+                        <input
+                            style="margin-left:50px;margin-right:10px;border-color:black;max-width: 180px;height:20px;background-color:rgb(153, 153, 153);border-width:1px;"
+                            type="text" placeholder="Video ID" id="videoID"><a class="fas fa-share-alt"
+                            style="border-width:1px;" id="shareVideo" title="Share"></a>
                         <FONT SIZE=2><a style="margin-left:90px;" id="nombreArchivo"></a></FONT>
                     </div>
                     <div class="col-2" style="margin-left:0px;width:auto;" id="nombreSala"></div>
@@ -55,7 +60,8 @@
             </div>
             <div class="row" style="padding-right: 0px;padding-left: 0x;">
                 <div class="col-11" style="padding-right: 0px;padding-left: 0x;">
-                    <textarea style="height: 95px;width:735px;background-color:rgb(153, 153, 153)" id="message" placeholder="PostIt"></textarea>
+                    <textarea style="height: 95px;width:735px;background-color:rgb(153, 153, 153)" id="message"
+                        placeholder="PostIt"></textarea>
                 </div>
                 <div class="col-1">
                     <button style="height: 48px;width:73px;border-width:1px;margin-top:0.25px;" class="fas fa-save"
@@ -76,12 +82,13 @@
                             </FONT>
                         </div>
                         <div class="col-4" style="padding-right: 0px;padding-left: 0x;">
-                            <button style="display: none;" class="fas fa-user-lock" id="blockUser" title="Block User"></button>
+                            <button style="display: none;" class="fas fa-user-lock" id="blockUser"
+                                title="Block User"></button>
                         </div>
-
                     </div>
-                </div><br>
-                <div style="width: 300px;">
+                     <FONT SIZE=2><a style="margin-top:5px;" class="fas fa-eye" id="show"> Show PostIt</a><a class="fas fa-eye-slash" style="display:none;margin-top:5px;" id="hide"> Hide PostIt</a></FONT>
+                </div>
+                <div style="width: 300px;" id="chat">
                     <input type="hidden" id="username" value={{myUser}}>
                     <div id="window">
                         <ul class="list-group list-group-flush">
@@ -91,6 +98,7 @@
                         <div id="input"></div>
                     </div>
                 </div>
+                <div id="postitview" style="display: none;"></div>
             </div>
         </div>
     </div>

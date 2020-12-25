@@ -29,15 +29,23 @@ module.exports = (io) => {
         socket.on('joinRoom:private', async (socketInfo) => {
             if (await checkRoom(socketInfo)) {
                 if (socketInfo[3] == socketInfo[4]) updateCreatorInRoom(socketInfo, true);
-                socket.join(socketInfo[1]);
-                io.sockets.in(socketInfo[1]).emit('room:message', socketInfo);
+
+                if (await checkBlockedUsers(socketInfo)) {
+                    socket.join(socketInfo[1]);
+                    io.sockets.in(socketInfo[1]).emit('room:message', socketInfo);
+                }
+                else socket.emit('blocked:message');
+                
 
                 socket.on('postit:message', async (data) => {
                     if (await checkBlockedUsers(socketInfo)) io.sockets.to(socketInfo[1]).emit('postit:message', data);
                     else socket.emit('blocked:message');
                 })
                 socket.on('postit:save', async (data) => {
-                    if (await checkBlockedUsers(socketInfo)) addPostit(data);
+                    if (await checkBlockedUsers(socketInfo)){
+                        addPostit(data);
+                        io.sockets.to(socketInfo[1]).emit('postit:message', data);
+                    }
                     else socket.emit('blocked:message');
                 });
                 socket.on('video:play', async () => {
@@ -54,9 +62,13 @@ module.exports = (io) => {
                     else socket.emit('blocked:message');
                 })
 
-                socket.on('user:block', (data) => {
+                socket.on('check:postits', async () => {
+                    socket.emit('show:postit',await checkPostits(socketInfo[3]));
+                })
+
+                socket.on('user:block', async (data) => {
                     socketInfo[6] = data;
-                    addBlockedUser(socketInfo);
+                    await addBlockedUser(socketInfo);
                     io.to(socketInfo[1]).emit('user:disabled', socketInfo);
                 })
 
@@ -69,16 +81,23 @@ module.exports = (io) => {
         })
         socket.on('joinRoom:public', async (socketRoom) => {
             if (socketRoom[3] == socketRoom[4]) updateCreatorInRoom(socketRoom, true);
-            socket.join(socketRoom[1]);
-            io.to(socketRoom[1]).emit('room:message', socketRoom);
-
+            
+            if (await checkBlockedUsers(socketRoom)) {
+                socket.join(socketRoom[1]);
+                io.to(socketRoom[1]).emit('room:message', socketRoom);
+            }
+            else socket.emit('blocked:message');
+            
             socket.on('postit:message', async (data) => {
 
                 if (await checkBlockedUsers(socketRoom)) io.to(socketRoom[1]).emit('postit:message', data);
                 else socket.emit('blocked:message');
             });
             socket.on('postit:save', async (data) => {
-                if (await checkBlockedUsers(socketRoom)) addPostit(data);
+                if (await checkBlockedUsers(socketRoom)) {
+                    addPostit(data);
+                    io.to(socketRoom[1]).emit('postit:message', data);
+                }
                 else socket.emit('blocked:message');
             });
             socket.on('video:play', async () => {
@@ -94,9 +113,13 @@ module.exports = (io) => {
                 else socket.emit('blocked:message');
             })
 
-            socket.on('user:block', (data) => {
+            socket.on('check:postits', async () => {
+                socket.emit('show:postit',await checkPostits(socketRoom[3]));
+            })
+
+            socket.on('user:block', async (data) => {
                 socketRoom[6] = data;
-                addBlockedUser(socketRoom);
+                await addBlockedUser(socketRoom);
                 io.to(socketRoom[1]).emit('user:disabled', socketRoom);
             })
             socket.on('socketRoom:unsubscribe', () => {
@@ -108,9 +131,13 @@ module.exports = (io) => {
         });
     });
 
+    async function checkPostits(data){
+        const myPostits = await postit.find({ user: data});
+        return myPostits;
+    }
 
     async function checkRoom(data) {
-        const roomOne = await room.findById({ _id: data[0] });;
+        const roomOne = await room.findById({ _id: data[0] });
         return (roomOne.password == data[5]) ? true : false;
     }
 
