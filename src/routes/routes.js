@@ -5,6 +5,7 @@ const postit = require('../models/postit');
 const room = require('../models/room');
 const video = require('../models/video');
 const email = require('../email');
+const blockedUser = require('../models/blockedUser');
 
 router.get('/home', isAuthenticated, async (req, res) => {
     const rooms = await room.find().lean();
@@ -60,7 +61,8 @@ router.post('/addRoom', isAuthenticated, async (req, res) => {
         name: req.body.nombreSala,
         type: req.body.typeRoom,
         password: req.body.password,
-        createdBy: req.body.createdBy
+        createdBy: req.body.createdBy,
+        stateCreator : false
     });
     await newRoom.save((err) => {
         if (err) {
@@ -72,16 +74,33 @@ router.post('/addRoom', isAuthenticated, async (req, res) => {
             res.redirect('/home');
         }
     })
+
+    const newCreatorInRoom = new creatorInRoom({
+        user: req.body.createdBy,
+        room: req.body.nombreSala,
+        state: false
+    });
+    await newCreatorInRoom.save((err) => {
+        if (err) {
+            console.log('Error al guardar el usuario creador en la BD. ' + err);
+        } else {
+            console.log('Exito al guardar usuario creador en la BD');
+        }
+    });
 })
 
 router.get('/addRoom/delete/:id', isAuthenticated, async (req, res) => {
 
-    await room.countDocuments({ _id: req.params.id, createdBy: req.user.email }, async (err, count) => {
-        if (count == 1) {
-            await room.findByIdAndDelete({ _id: req.params.id });
+    await room.countDocuments({ _id: req.params.id,createdBy:req.user.email},async (err,count)=>{
+        if(count==1) {
+           const deleteRoom = await room.find({ _id: req.params.id });
+           await room.findByIdAndDelete({ _id: req.params.id });
+           await blockedUser.deleteMany({room:deleteRoom[0].name});
+           
         }
         else console('Imposible eliminar, no eres el creador de la sala');
     });
+    
     res.redirect('/home');
 })
 

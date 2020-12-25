@@ -1,68 +1,86 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
     integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-<div class="container-fluid bg-light" style="padding-left: 0px;padding-right: 0px;">
+<div class="container-fluid" style="padding-left: 0px;padding-right: 0px;">
     <div class="row">
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="card border-dark overflow-auto" style="height: 580px;">
-            <div class="card-header text-center bg-light border-dark" style="width: 8rem;">Rooms</div>
+        <div class="card mx-auto border-dark overflow-auto" style="height: 580px;width :195px;background-color:ghostwhite" id="leftColumn">
+            <div class="card-header text-center border-dark" style="width: 12rem;background-color:ghostwhite;" id="title">Available Rooms</div>
             <br>
             <div class="col-1">
                 {{#each rooms}}
-                <div class="card-deck border-dark" style="width: 8rem;">
-                    <div class="card text-center border-dark">
-                        <ul class="list-group list-group-flush">
-                            <p class="card-text bg-light">{{name}}</p>
-                        </ul>
-                        {{#ifEqu 'private' type}}
-                        <input type="password" placeholder="Password" id="password">
-                        {{/ifEqu}}
-                        <input type="hidden" id="typeRoom" value="{{type}}">
-                        <a class="btn btn-sm border-dark bg-success"
-                            id="{{_id}},{{name}},{{type}},{{../myUser}}">Join</a>
-                        <a class="btn btn-sm border-dark bg-warning" id="leaveRoom" href="/home">Leave</a>
-                        <a class="btn btn-sm border-dark bg-danger" href="/addRoom/delete/{{_id}}">Delete</a>
+                <div class="room" id="{{name}}" style="margin-top: 5px;">
+                    <div class="card-deck border-dark" style="width: 12rem;" name="widthRoom">
+                        <div class="card text-center border-dark">
+                            <ul class="list-group list-group-flush">
+                                <p class="card-text bg-light">{{name}}</p>
+                            </ul>
+                            {{#ifEqu 'private' type}}
+                            <input type="password" placeholder="Password" name ="password" id="{{../_id}}"></input>
+                            {{/ifEqu}}
+                            <input type="hidden" id="typeRoom" value="{{type}}">
+                            <a class="btn btn-sm border-dark bg-success"
+                                id="{{_id}},{{name}},{{type}},{{../myUser}},{{createdBy}}" name="joinButton">Join</a>
+                            <a class="btn btn-sm border-dark bg-warning" name="leaveButton" id="leaveRoom"
+                                style="display:none;" href="/home" title="{{name}}">Leave</a>
+                                {{#ifEqu ../myUser createdBy}}
+                            <a class="btn btn-sm border-dark bg-danger" href="/addRoom/delete/{{../_id}}"
+                                name="deleteButton">Delete</a>
+                                {{else}}
+                                <a class="btn btn-sm border-dark bg-danger" style="pointer-events:none;" href="/addRoom/delete/{{../id}}"
+                                name="deleteButton">Delete</a>
+                                {{/ifEqu}}
+                        </div>
                     </div>
                 </div>
                 <br>
                 {{/each}}
             </div>
         </div>
-        <div class="col-7" style="padding-left: 0px;padding-right: 0px;">
+        <div class="col-7" style="display:none;padding-left: 0px;padding-right: 0px;" id="centerColumn">
             <div style="margin-top: 0px;" id="videoHTML">
-                <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-                    id="videoPlayer" type="video/mp4" width="810" height="452"></video>
+                <iframe src="https://www.youtube.com/embed/etAIpkdhU9Q?enablejsapi=1&origin=http://localhost:3000"
+                    id="videoPlayer" width="810" height="452"></iframe>
             </div>
-            <div class="card border-dark" style="width: 808px;">
+            <div class="card border-dark" style="width: 808px;background-color:rgb(153, 153, 153)">
                 <div class="row">
                     <div class="col-10" style="padding-right: 0px;padding-left: 20px;">
-                        <a class="fas fa-play" id="playVideo"></a>
-                        <a class="fas fa-pause" id="pauseVideo"></a>
-                            <FONT SIZE=2>
-                                <select style="margin-left:20px;max-width: 180px;" id="videoname">
-                                    {{#each myVideos}}
-                                    <option class="fa"> {{name}}</option>
-                                    {{/each}}
-                                </select>
-                            </FONT>
-                            <FONT SIZE=2><a style="margin-left:90px;" id="nombreArchivo"></a></FONT>
+                        <a class="fas fa-play" style="border-width:1px;" id="playVideo" title="Play"></a>
+                        <a class="fas fa-pause" style="border-width:1px;" id="pauseVideo" title="Pause"></a>
+                        <input style="margin-left:50px;margin-right:10px;border-color:black;max-width: 180px;height:20px;background-color:rgb(153, 153, 153);border-width:1px;" type="text" placeholder="Video ID" id="videoID"><a class="fas fa-share-alt" style="border-width:1px;" id="shareVideo" title="Share"></a>
+                        <FONT SIZE=2><a style="margin-left:90px;" id="nombreArchivo"></a></FONT>
                     </div>
-                    <div class="col-1" style="margin-left:55px;" id="nombreSala"></div>
+                    <div class="col-2" style="margin-left:0px;width:auto;" id="nombreSala"></div>
                 </div>
             </div>
             <div class="row" style="padding-right: 0px;padding-left: 0x;">
                 <div class="col-11" style="padding-right: 0px;padding-left: 0x;">
-                    <textarea style="height: 95px;width:735px;" id="message" placeholder="PostIt"></textarea>
+                    <textarea style="height: 95px;width:735px;background-color:rgb(153, 153, 153)" id="message" placeholder="PostIt"></textarea>
                 </div>
                 <div class="col-1">
-                    <!--button style="height: 48px;width:73px;border-width:1px;margin-top:0.25px;" class="fas fa-save" id="savePostit"></button-->
-                    <button style="height: 94px;width:73px;border-width:1px;" class="fas fa-paper-plane " id="sendPostit"></buton>
+                    <button style="height: 48px;width:73px;border-width:1px;margin-top:0.25px;" class="fas fa-save"
+                        id="savePostit" title="Save"></button>
+                    <button style="height: 47px;width:73px;border-width:1px;" class="fas fa-paper-plane "
+                        id="sendPostit" title="Send"></buton>
                 </div>
             </div>
         </div>
-        <div class="col-3 text-left" style="padding-left: 38px;padding-right: 0px;">
+        <div class="col-3 text-left" style="display:none;padding-left: 38px;" id="rightColumn">
             <div class="card border-dark overflow-auto bg-warning" style="height: 580px;width: 335px;">
-                <div class="card-header text-center bg-warning border-dark ">Post-It</div><br>
+                <div class="card-header text-center bg-warning border-dark ">
+                    <div class="row" style="padding-right: 0px;padding-left: 0x;">
+                        <div class="col-8">
+                            <FONT SIZE=2>
+                                <select style="margin-left:20px;width: 180px;display:none" id="listUsers">
+                                </select>
+                            </FONT>
+                        </div>
+                        <div class="col-4" style="padding-right: 0px;padding-left: 0x;">
+                            <button style="display: none;" class="fas fa-user-lock" id="blockUser" title="Block User"></button>
+                        </div>
+
+                    </div>
+                </div><br>
                 <div style="width: 300px;">
                     <input type="hidden" id="username" value={{myUser}}>
                     <div id="window">
@@ -75,7 +93,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 <script src="/socket.io/socket.io.js" charset="utf-8"></script>
