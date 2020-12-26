@@ -4,7 +4,7 @@
 <div class="container-fluid" style="padding-left: 0px;padding-right: 0px;">
     <div class="row">
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="card mx-auto border-dark overflow-auto"
+        <div class="card overflow-auto mx-auto border-dark"
             style="height: 580px;width :195px;background-color:ghostwhite" id="leftColumn">
             <div class="card-header text-center border-dark" style="width: 12rem;background-color:ghostwhite;"
                 id="title">Available Rooms</div>
@@ -39,40 +39,46 @@
                 {{/each}}
             </div>
         </div>
-        <div class="col-7" style="display:none;padding-left: 0px;padding-right: 0px;" id="centerColumn">
+        <div style="display:none;padding-left: 0px;padding-right: 0px;width:780px;" id="centerColumn">
             <div style="margin-top: 0px;" id="videoHTML">
-                <iframe src="https://www.youtube.com/embed/etAIpkdhU9Q?enablejsapi=1&origin=http://localhost:3000"
-                    id="videoPlayer" width="810" height="452" style="pointer-events:none;" allow="fullscreen"></iframe>
+                <iframe src="https://www.youtube.com/embed/?enablejsapi=1&origin=http://localhost:3000" id="videoPlayer"
+                    width="800" height="452" style="pointer-events:none;" allow="fullscreen"></iframe>
             </div>
-            <div class="card border-dark" style="width: 808px;background-color:rgb(153, 153, 153)">
+            <div class="card border-dark" style="width: 800px;background-color:rgb(153, 153, 153)">
                 <div class="row">
-                    <div class="col-10" style="padding-right: 0px;padding-left: 20px;">
-                        <a class="fas fa-play" style="border-width:1px;" id="playVideo" title="Play"></a>
-                        <a class="fas fa-pause" style="border-width:1px;" id="pauseVideo" title="Pause"></a>
-                        <input
-                            style="margin-left:50px;margin-right:10px;border-color:black;max-width: 180px;height:20px;background-color:rgb(153, 153, 153);border-width:1px;"
-                            type="text" placeholder="Video ID" id="videoID"><a class="fas fa-share-alt"
-                            style="border-width:1px;" id="shareVideo" title="Share"></a>
-                        <FONT SIZE=2><a style="margin-left:90px;" id="nombreArchivo"></a></FONT>
+                    <div class="col-12" style="padding-right: 0px;padding-left: 20px;">
+                        <a class="fas fa-play" style="border-width:1px;cursor: pointer;" id="playVideo"
+                            title="Play"></a>
+                        <a class="fas fa-pause" style="border-width:1px;cursor: pointer;" id="pauseVideo"
+                            title="Pause"></a>
+                        <input type="range" value="0" min="0" max="100" autocomplete="off" step="1"
+                            onclick="moveBar(this.value)"
+                            style="width: 240px;margin-left:30px;" id="slider">
+                        <FONT SIZE=2><a style="position:absolute;z-index:1;" id="labelBar"></a></FONT>
+                        <a style="margin-left:80px;max-width:80px;display:none;" id="nombreSala"></a>
+                        <FONT SIZE=2><input
+                                style="text-center;margin-left:180px;margin-right:20px;border-color:black;max-width: 120px;margin-bottom:5px;height:18px;background-color:rgb(153, 153, 153);border-width:1px;"
+                                type="text" placeholder="Video ID" id="videoID"></FONT><a class="fas fa-share-alt"
+                            style="border-width:1px;cursor: pointer;" id="shareVideo" title="Share"></a>
+                        <a style="margin-left:5px;" id="nombreArchivo"></a>
                     </div>
-                    <div class="col-2" style="margin-left:0px;width:auto;" id="nombreSala"></div>
                 </div>
             </div>
             <div class="row" style="padding-right: 0px;padding-left: 0x;">
-                <div class="col-11" style="padding-right: 0px;padding-left: 0x;">
-                    <textarea style="height: 95px;width:735px;background-color:rgb(153, 153, 153)" id="message"
+                <div class="col-11" style="margin-right: 0px;padding-left: 0x;">
+                    <textarea style="height: 90px;width:735px;background-color:rgb(153, 153, 153)" id="message"
                         placeholder="PostIt"></textarea>
                 </div>
-                <div class="col-1">
-                    <button style="height: 48px;width:73px;border-width:1px;margin-top:0.25px;" class="fas fa-save"
-                        id="savePostit" title="Save"></button>
-                    <button style="height: 47px;width:73px;border-width:1px;" class="fas fa-paper-plane "
+                <div style="width: 60px;">
+                    <button style="height: 45px;width:72px;border-width:1px;margin-top:0.25px;" class="fas fa-save"
+                        id="savePostit" title="Save"></button><br>
+                    <button style="height: 45px;width:72px;border-width:1px;" class="fas fa-paper-plane "
                         id="sendPostit" title="Send"></buton>
                 </div>
             </div>
         </div>
-        <div class="col-3 text-left" style="display:none;padding-left: 38px;" id="rightColumn">
-            <div class="card border-dark overflow-auto bg-warning" style="height: 580px;width: 335px;">
+        <div class="col-3 text-left" style="display:none;padding-left: 20px;" id="rightColumn">
+            <div class="card border-dark bg-warning" style="height: 580px;width: 355px;">
                 <div class="card-header text-center bg-warning border-dark ">
                     <div class="row" style="padding-right: 0px;padding-left: 0x;">
                         <div class="col-8">
@@ -86,9 +92,12 @@
                                 title="Block User"></button>
                         </div>
                     </div>
-                     <FONT SIZE=2><a style="margin-top:5px;" class="fas fa-eye" id="show"> Show PostIt</a><a class="fas fa-eye-slash" style="display:none;margin-top:5px;" id="hide"> Hide PostIt</a></FONT>
+                    <FONT SIZE=2><a style="margin-top:5px;cursor: pointer;" class="fas fa-eye" id="show"> Show
+                            PostIt</a><a class="fas fa-eye-slash" style="display:none;margin-top:5px;cursor: pointer;"
+                            id="hide"> Hide PostIt</a>
+                    </FONT>
                 </div>
-                <div style="width: 300px;" id="chat">
+                <div class="overflow-auto" style="width: 350px;" id="chat">
                     <input type="hidden" id="username" value={{myUser}}>
                     <div id="window">
                         <ul class="list-group list-group-flush">
@@ -98,7 +107,7 @@
                         <div id="input"></div>
                     </div>
                 </div>
-                <div id="postitview" style="display: none;"></div>
+                <div class="overflow-auto" id="postitview" style="display: none;"></div>
             </div>
         </div>
     </div>
