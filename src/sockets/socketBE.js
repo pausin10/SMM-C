@@ -1,6 +1,5 @@
 const room = require('../models/room');
 const postit = require('../models/postit');
-const video = require('../models/video')
 const blockedUser = require('../models/blockedUser');
 const fs = require('fs');
 
@@ -32,6 +31,7 @@ module.exports = (io) => {
 
                 if (await checkBlockedUsers(socketInfo)) {
                     socket.join(socketInfo[1]);
+                    socket.emit('video:room',await checkRoomVideo(socketInfo[1]));
                     io.sockets.in(socketInfo[1]).emit('room:message', socketInfo);
                 }
                 else socket.emit('blocked:message');
@@ -57,8 +57,18 @@ module.exports = (io) => {
                     else socket.emit('blocked:message');
                 })
 
+                socket.on('video:moveBar', async (data) => {
+                    if (await checkBlockedUsers(socketInfo)) {
+                        io.to(socketInfo[1]).emit('video:moveBarAll',data);
+                    }
+                    else socket.emit('blocked:message');
+                })
+
                 socket.on('video:source', async (data) => {
-                    if (await checkBlockedUsers(socketInfo)) io.to(socketInfo[1]).emit('video:changeSource', data);
+                    if (await checkBlockedUsers(socketInfo)) {
+                        await updateVideo(socketInfo[1],data);
+                        io.to(socketInfo[1]).emit('video:changeSource', data);
+                    }
                     else socket.emit('blocked:message');
                 })
 
@@ -84,6 +94,7 @@ module.exports = (io) => {
             
             if (await checkBlockedUsers(socketRoom)) {
                 socket.join(socketRoom[1]);
+                socket.emit('video:room',await checkRoomVideo(socketRoom[1]));
                 io.to(socketRoom[1]).emit('room:message', socketRoom);
             }
             else socket.emit('blocked:message');
@@ -108,8 +119,19 @@ module.exports = (io) => {
                 if (await checkBlockedUsers(socketRoom)) io.to(socketRoom[1]).emit('video:pauseAll', socketRoom[1]);
                 else socket.emit('blocked:message');
             })
+
+            socket.on('video:moveBar', async (data) => {
+                if (await checkBlockedUsers(socketRoom)) {
+                    io.to(socketRoom[1]).emit('video:moveBarAll',data);
+                }
+                else socket.emit('blocked:message');
+            })
+
             socket.on('video:source', async (data) => {
-                if (await checkBlockedUsers(socketRoom)) io.to(socketRoom[1]).emit('video:changeSource', data);
+                if (await checkBlockedUsers(socketRoom)) {
+                    await updateVideo(socketRoom[1],data);
+                    io.to(socketRoom[1]).emit('video:changeSource', data);
+                }
                 else socket.emit('blocked:message');
             })
 
@@ -134,6 +156,11 @@ module.exports = (io) => {
     async function checkPostits(data){
         const myPostits = await postit.find({ user: data});
         return myPostits;
+    }
+
+    async function checkRoomVideo(data){
+        const roomVideo = await room.find({ name: data});
+        return roomVideo[0].video;
     }
 
     async function checkRoom(data) {
@@ -167,7 +194,10 @@ module.exports = (io) => {
 
     async function updateCreatorInRoom(data, state) {
         const updateState = await room.updateOne({ createdBy: data[3], name: data[1] }, { stateCreator: state });
-        console.log(updateState);
+    }
+
+    async function updateVideo(roomName,YTid){
+        const updateVideo = await room.updateOne({name: roomName}, { video: YTid});
     }
 
     async function addPostit(data) {

@@ -40,12 +40,10 @@ function onPlayerReady(event) {
     });
 
 }
-
 var tag = document.createElement('script');
 tag.src = "https://www.youtube.com/player_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
 
 document.querySelector("body").addEventListener('click', (data) => {
     const dataInput = data.target.closest('a');
@@ -82,7 +80,6 @@ document.querySelector("body").addEventListener('click', (data) => {
 });
 
 btnBlockUser.addEventListener('click', () => {
-
     var selectedUser = document.getElementById("listUsers");
     var text = selectedUser.options[selectedUser.selectedIndex].text;
     socket.emit('user:block', text);
@@ -115,7 +112,7 @@ btnSave.addEventListener('click', () => {
         message: message.value,
         username: username.value,
         nameVideo: array[0],
-        currentTime: player.getCurrentTime().toFixed(2)
+        currentTime: secondsToString(player.getCurrentTime().toFixed(0))
     });
     document.getElementById('message').value = '';
 });
@@ -126,7 +123,7 @@ btnSend.addEventListener('click', () => {
         message: message.value,
         username: username.value,
         nameVideo: array[0],
-        currentTime: player.getCurrentTime().toFixed(2)
+        currentTime: secondsToString(player.getCurrentTime().toFixed(0))
     });
     document.getElementById('message').value = '';
 });
@@ -138,15 +135,40 @@ btnPause.addEventListener('click', () => {
     socket.emit('video:pause');
 });
 
+function eventBar(){
+    document.getElementById('slider').value = ((player.getCurrentTime()/player.getDuration()).toFixed(2))*100;
+    document.getElementById('labelBar').innerHTML = secondsToString(player.getCurrentTime().toFixed(0))+' / '+secondsToString(player.getDuration().toFixed(0));
+}
+
+function moveBar(newVal){
+    setInterval(eventBar,1000);
+    socket.emit('video:moveBar',(newVal*player.getDuration()/100));
+}
+
+function secondsToString(seconds) {
+    var hour = Math.floor(seconds / 3600);
+    hour = (hour < 10)? '0' + hour : hour;
+    var minute = Math.floor((seconds / 60) % 60);
+    minute = (minute < 10)? '0' + minute : minute;
+    var second = seconds % 60;
+    second = (second < 10)? '0' + second : second;
+    return hour + ':' + minute + ':' + second;
+  }
+
 socket.on('video:playAll', () => {
-    player.playVideo()
+    player.playVideo();
+    setInterval(eventBar,1000);
 })
 socket.on('video:pauseAll', () => {
     player.pauseVideo();
 })
 
+socket.on('video:moveBarAll', (data) => {
+    player.seekTo(data,true);
+})
+
 socket.on('video:changeSource', (data) => {
-    media.src = "https://www.youtube.com/embed/"+data+"?enablejsapi=1&origin=http://localhost:3000"
+    media.src = "https://www.youtube.com/embed/" + data + "?enablejsapi=1&origin=http://localhost:3000"
     document.getElementById('nombreArchivo').innerHTML = data;
     document.getElementById("videoID").value = '';
 })
@@ -207,12 +229,16 @@ socket.on('user:leave', (data) => {
 
 });
 
+socket.on('video:room', (data) => {
+    media.src = "https://www.youtube.com/embed/" + data + "?enablejsapi=1&origin=http://localhost:3000"
+});
+
 socket.on('user:disabled', (data) => {
     info.innerHTML += data[6] + ' blocked ' + '<br>';
 });
 
 socket.on('show:postit', (data) => {
-    for(var i=0;i<data.length;i++) document.getElementById('postitview').innerHTML += '<div class="col-1"><div class=" card-deck" style="width: 20rem;margin-top: 5px;margin-right:15px;margin-bottom:5px;"><div class="card text-center"><h5 class="card-title">'+data[i].text+'</h5><ul class="list-group list-group-flush"><li class="list-group-item">'+data[i].nameVideo+'</li><li class="list-group-item">'+data[i].currentTime+' s</li><div class="card-footer"><p><small class="text-muted">'+data[i].date+'</small></p></div></ul></div></div></div>';
+    for (var i = 0; i < data.length; i++) document.getElementById('postitview').innerHTML += '<div class="col-1"><div class=" card-deck" style="width: 21rem;margin-top: 5px;margin-right:15px;margin-bottom:5px;"><div class="card text-center"><h5 class="card-title">' + data[i].text + '</h5><ul class="list-group list-group-flush"><li class="list-group-item">' + data[i].nameVideo + '</li><li class="list-group-item">' + data[i].currentTime + '</li><div class="card-footer"><p><small class="text-muted">' + data[i].date + '</small></p></div></ul></div></div></div>';
     document.getElementById('postitview').style.display = 'block';
 });
 

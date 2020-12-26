@@ -3,16 +3,13 @@ const router = express.Router();
 const user = require('../models/user');
 const postit = require('../models/postit');
 const room = require('../models/room');
-const video = require('../models/video');
 const email = require('../email');
 const blockedUser = require('../models/blockedUser');
 
 router.get('/home', isAuthenticated, async (req, res) => {
     const rooms = await room.find().lean();
-    const myVideos = await video.find().lean();
     res.render('general/home', {
         myUser: req.user.email,
-        myVideos,
         rooms: { ...rooms }
 
     });
@@ -62,7 +59,8 @@ router.post('/addRoom', isAuthenticated, async (req, res) => {
         type: req.body.typeRoom,
         password: req.body.password,
         createdBy: req.body.createdBy,
-        stateCreator : false
+        stateCreator : false,
+        video: 'pAgnJDJN4VA'
     });
     await newRoom.save((err) => {
         if (err) {
@@ -74,19 +72,6 @@ router.post('/addRoom', isAuthenticated, async (req, res) => {
             res.redirect('/home');
         }
     })
-
-    const newCreatorInRoom = new creatorInRoom({
-        user: req.body.createdBy,
-        room: req.body.nombreSala,
-        state: false
-    });
-    await newCreatorInRoom.save((err) => {
-        if (err) {
-            console.log('Error al guardar el usuario creador en la BD. ' + err);
-        } else {
-            console.log('Exito al guardar usuario creador en la BD');
-        }
-    });
 })
 
 router.get('/addRoom/delete/:id', isAuthenticated, async (req, res) => {
