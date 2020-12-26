@@ -7,6 +7,8 @@ let btnPause = document.getElementById('pauseVideo');
 let btnSave = document.getElementById('savePostit');
 let btnShare = document.getElementById('shareVideo');
 let btnBlockUser = document.getElementById('blockUser');
+let btnShowPostit = document.getElementById('show');
+let btnHidePostit = document.getElementById('hide');
 let media = document.querySelector('iframe');
 
 let message = document.getElementById('message');
@@ -87,27 +89,44 @@ btnBlockUser.addEventListener('click', () => {
 
 });
 
+btnShowPostit.addEventListener('click', () => {
+    document.getElementById('chat').style.display = 'none';
+    document.getElementById('show').style.display = 'none';
+    document.getElementById('hide').style.display = 'block';
+    socket.emit('check:postits');
+});
+
+btnHidePostit.addEventListener('click', () => {
+    document.getElementById('postitview').style.display = 'none';
+    document.getElementById('chat').style.display = 'block';
+    document.getElementById('show').style.display = 'block';
+    document.getElementById('hide').style.display = 'none';
+    document.getElementById('postitview').innerHTML = '';
+});
+
 btnShare.addEventListener('click', () => {
     var data = document.getElementById("videoID").value;
     socket.emit('video:source', data);
 });
 
 btnSave.addEventListener('click', () => {
+    var array = media.src.split('?');
     socket.emit('postit:save', {
         message: message.value,
         username: username.value,
-        nameVideo: media.currentSrc,
-        currentTime: media.currentTime
+        nameVideo: array[0],
+        currentTime: player.getCurrentTime().toFixed(2)
     });
     document.getElementById('message').value = '';
 });
 
 btnSend.addEventListener('click', () => {
+    var array = media.src.split('?');
     socket.emit('postit:message', {
         message: message.value,
         username: username.value,
-        nameVideo: media.currentSrc,
-        currentTime: media.currentTime
+        nameVideo: array[0],
+        currentTime: player.getCurrentTime().toFixed(2)
     });
     document.getElementById('message').value = '';
 });
@@ -189,8 +208,12 @@ socket.on('user:leave', (data) => {
 });
 
 socket.on('user:disabled', (data) => {
-    console.log(data[6] + ' blocked ');
     info.innerHTML += data[6] + ' blocked ' + '<br>';
+});
+
+socket.on('show:postit', (data) => {
+    for(var i=0;i<data.length;i++) document.getElementById('postitview').innerHTML += '<div class="col-1"><div class=" card-deck" style="width: 20rem;margin-top: 5px;margin-right:15px;margin-bottom:5px;"><div class="card text-center"><h5 class="card-title">'+data[i].text+'</h5><ul class="list-group list-group-flush"><li class="list-group-item">'+data[i].nameVideo+'</li><li class="list-group-item">'+data[i].currentTime+' s</li><div class="card-footer"><p><small class="text-muted">'+data[i].date+'</small></p></div></ul></div></div></div>';
+    document.getElementById('postitview').style.display = 'block';
 });
 
 socket.on('blocked:message', () => {
