@@ -31,6 +31,7 @@ module.exports = (io) => {
 
                 if (await checkBlockedUsers(socketInfo)) {
                     socket.join(socketInfo[1]);
+                    socket.emit('show:chat',await checkMessages(socketInfo));
                     socket.emit('video:room',await checkRoomVideo(socketInfo[1]));
                     io.sockets.in(socketInfo[1]).emit('room:message', socketInfo);
                 }
@@ -38,11 +39,16 @@ module.exports = (io) => {
                 
 
                 socket.on('postit:message', async (data) => {
-                    if (await checkBlockedUsers(socketInfo)) io.sockets.to(socketInfo[1]).emit('postit:message', data);
+                    if (await checkBlockedUsers(socketInfo)) {
+                        addMessage(data,socketInfo);
+                        io.sockets.to(socketInfo[1]).emit('postit:message', data);
+                    }
                     else socket.emit('blocked:message');
+
                 })
                 socket.on('postit:save', async (data) => {
                     if (await checkBlockedUsers(socketInfo)){
+                        addMessage(data,socketInfo);
                         addPostit(data);
                         io.sockets.to(socketInfo[1]).emit('postit:message', data);
                     }
@@ -95,17 +101,21 @@ module.exports = (io) => {
             if (await checkBlockedUsers(socketRoom)) {
                 socket.join(socketRoom[1]);
                 socket.emit('video:room',await checkRoomVideo(socketRoom[1]));
+                socket.emit('show:chat',await checkMessages(socketRoom));
                 io.to(socketRoom[1]).emit('room:message', socketRoom);
             }
             else socket.emit('blocked:message');
             
             socket.on('postit:message', async (data) => {
-
-                if (await checkBlockedUsers(socketRoom)) io.to(socketRoom[1]).emit('postit:message', data);
+                if (await checkBlockedUsers(socketRoom)) {
+                    addMessage(data,socketRoom);
+                    io.to(socketRoom[1]).emit('postit:message', data);
+                }
                 else socket.emit('blocked:message');
             });
             socket.on('postit:save', async (data) => {
                 if (await checkBlockedUsers(socketRoom)) {
+                    addMessage(data,socketRoom);
                     addPostit(data);
                     io.to(socketRoom[1]).emit('postit:message', data);
                 }
@@ -158,6 +168,11 @@ module.exports = (io) => {
         return myPostits;
     }
 
+    async function checkMessages(data){
+        const roomChat = await room.find({ name: data[1]});
+        return roomChat;
+    }
+
     async function checkRoomVideo(data){
         const roomVideo = await room.find({ name: data});
         return roomVideo[0].video;
@@ -190,6 +205,10 @@ module.exports = (io) => {
                 console.log('Exito al guardar ' + data[6] + ' bloqueado en la BD');
             }
         });
+    }
+
+    async function addMessage(data,info){
+        await room.updateOne({name: info[1]},{$push:{messages: `<Strong>${data.username}</Strong> : ${data.message}`}});
     }
 
     async function updateCreatorInRoom(data, state) {
