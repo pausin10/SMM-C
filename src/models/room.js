@@ -7,7 +7,8 @@ const roomSchema = new Schema({
     password: { type: String },
     createdBy: { type: String },
     stateCreator: {type: Boolean},
-    video: {type: String}
+    video: {type: String},
+    messages: [String]
 });
 
 module.exports = mongoose.model('room', roomSchema);

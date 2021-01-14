@@ -52,9 +52,9 @@
                         <a class="fas fa-pause" style="border-width:1px;cursor: pointer;" id="pauseVideo"
                             title="Pause"></a>
                         <input type="range" value="0" min="0" max="100" autocomplete="off" step="1"
-                            onclick="moveBar(this.value)"
+                            onchange="moveBar(this.value)"
                             style="width: 240px;margin-left:30px;" id="slider">
-                        <FONT SIZE=2><a style="position:absolute;z-index:1;" id="labelBar"></a></FONT>
+                        <FONT SIZE=2><a style="position:absolute;z-index:1;" id="labelBar">00:00:00 / 00:00:00</a></FONT>
                         <a style="margin-left:80px;max-width:80px;display:none;" id="nombreSala"></a>
                         <FONT SIZE=2><input
                                 style="text-center;margin-left:180px;margin-right:20px;border-color:black;max-width: 120px;margin-bottom:5px;height:18px;background-color:rgb(153, 153, 153);border-width:1px;"
@@ -78,7 +78,7 @@
             </div>
         </div>
         <div class="col-3 text-left" style="display:none;padding-left: 20px;" id="rightColumn">
-            <div class="card border-dark bg-warning" style="height: 580px;width: 355px;">
+            <div class="card border-dark bg-warning" style="height: 580px;width: 430px;">
                 <div class="card-header text-center bg-warning border-dark ">
                     <div class="row" style="padding-right: 0px;padding-left: 0x;">
                         <div class="col-8">
@@ -97,7 +97,7 @@
                             id="hide"> Hide PostIt</a>
                     </FONT>
                 </div>
-                <div class="overflow-auto" style="width: 350px;" id="chat">
+                <div class="overflow-auto" style="width: 420px;" id="chat">
                     <input type="hidden" id="username" value={{myUser}}>
                     <div id="window">
                         <ul class="list-group list-group-flush">

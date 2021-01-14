@@ -238,9 +238,15 @@ socket.on('user:disabled', (data) => {
 });
 
 socket.on('show:postit', (data) => {
-    for (var i = 0; i < data.length; i++) document.getElementById('postitview').innerHTML += '<div class="col-1"><div class=" card-deck" style="width: 21rem;margin-top: 5px;margin-right:15px;margin-bottom:5px;"><div class="card text-center"><h5 class="card-title">' + data[i].text + '</h5><ul class="list-group list-group-flush"><li class="list-group-item">' + data[i].nameVideo + '</li><li class="list-group-item">' + data[i].currentTime + '</li><div class="card-footer"><p><small class="text-muted">' + data[i].date + '</small></p></div></ul></div></div></div>';
+    for (var i = 0; i < data.length; i++) document.getElementById('postitview').innerHTML += '<div class="col-1"><div class=" card-deck" style="width: 21rem;margin-top: 5px;margin-right:5px;margin-left:40px;margin-bottom:5px;"><div class="card text-center"><h5 class="card-title">' + data[i].text + '</h5><ul class="list-group list-group-flush"><li class="list-group-item">' + data[i].nameVideo + '</li><li class="list-group-item">' + data[i].currentTime + '</li><div class="card-footer"><p><small class="text-muted">' + data[i].date + '</small></p></div></ul></div></div></div>';
     document.getElementById('postitview').style.display = 'block';
 });
+
+socket.on('show:chat',(data)=>{
+    for (var i = 0; i < data[0].messages.length; i++) {
+        output.innerHTML += data[0].messages[i]+'<br>';
+    }
+})
 
 socket.on('blocked:message', () => {
     alert('You are blocked');
